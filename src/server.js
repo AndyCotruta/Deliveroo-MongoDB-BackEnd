@@ -5,6 +5,13 @@ import cors from "cors";
 import restaurantRouter from "./restaurants/index.js";
 import createHttpError from "http-errors";
 import bodyParser from "body-parser";
+import {
+  badRequestHandler,
+  genericErrorHandler,
+  notFoundHandler,
+  unauthorizedHandler,
+} from "./errorHandlers.js";
+import dishesRouter from "./dishes/index.js";
 
 const server = express();
 const port = process.env.PORT;
@@ -17,6 +24,14 @@ server.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 server.use(express.json());
 
 server.use("/restaurants", restaurantRouter);
+server.use("/restaurants", dishesRouter);
+
+// ..................ERROR HANDLERS............
+
+server.use(badRequestHandler); // 400
+server.use(unauthorizedHandler); // 401
+server.use(notFoundHandler); // 404
+server.use(genericErrorHandler); // 500
 
 mongoose.connect(process.env.MONGODB_URL);
 
