@@ -12,6 +12,8 @@ import {
   unauthorizedHandler,
 } from "./errorHandlers.js";
 import dishesRouter from "./dishes/index.js";
+import categoriesRouter from "./categories/index.js";
+import featuredCategoriesRouter from "./featuredCategories/index.js";
 
 const server = express();
 const port = process.env.PORT;
@@ -25,6 +27,8 @@ server.use(express.json());
 
 server.use("/restaurants", restaurantRouter);
 server.use("/restaurants", dishesRouter);
+server.use("/categories", categoriesRouter);
+server.use("/featuredCategories", featuredCategoriesRouter);
 
 // ..................ERROR HANDLERS............
 
