@@ -66,9 +66,9 @@ usersRouter.get(
 
 usersRouter.post("/register", async (req, res, next) => {
   try {
-    const user = await UserModel.findOne({ email: req.body.email });
+    const user = await UsersModel.findOne({ email: req.body.email });
     if (!user) {
-      const newUser = new UserModel(req.body);
+      const newUser = new UsersModel(req.body);
       const { _id, role } = await newUser.save();
       const payload = { _id, role };
       const accessToken = await createAccessToken(payload);
