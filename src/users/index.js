@@ -66,9 +66,16 @@ usersRouter.get(
 
 usersRouter.post("/register", async (req, res, next) => {
   try {
-    const newUser = new UsersModel(req.body);
-    const { _id } = await newUser.save();
-    res.status(201).send(`User with ID ${_id} was created successfully`);
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (!user) {
+      const newUser = new UserModel(req.body);
+      const { _id, role } = await newUser.save();
+      const payload = { _id, role };
+      const accessToken = await createAccessToken(payload);
+      res.send(accessToken);
+    } else {
+      next(createHttpError(404, "An user with that email already exists"));
+    }
   } catch (error) {
     console.log(error);
     next(error);
