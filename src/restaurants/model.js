@@ -12,6 +12,7 @@ const dishSchema = new Schema(
         "https://consumer-component-library.roocdn.com/26.13.16/static/images/placeholder.svg",
     },
     price: { type: Number, required: true },
+    calories: { type: Number, required: true },
   },
   { timestamps: true }
 );
