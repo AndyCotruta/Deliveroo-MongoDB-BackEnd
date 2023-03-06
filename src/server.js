@@ -15,6 +15,7 @@ import dishesRouter from "./dishes/index.js";
 import categoriesRouter from "./categories/index.js";
 import featuredCategoriesRouter from "./featuredCategories/index.js";
 import usersRouter from "./users/index.js";
+import filesRouter from "./files/index.js";
 
 const server = express();
 const port = process.env.PORT;
@@ -31,6 +32,7 @@ server.use("/restaurants", dishesRouter);
 server.use("/categories", categoriesRouter);
 server.use("/featuredCategories", featuredCategoriesRouter);
 server.use("/users", usersRouter);
+server.use("/files", filesRouter);
 
 // ..................ERROR HANDLERS............
 

@@ -6,7 +6,11 @@ const dishSchema = new Schema(
   {
     name: { type: String, required: true },
     short_description: { type: String, required: true },
-    image: { type: String, required: true },
+    image: {
+      type: String,
+      default:
+        "https://consumer-component-library.roocdn.com/26.13.16/static/images/placeholder.svg",
+    },
     price: { type: Number, required: true },
   },
   { timestamps: true }
