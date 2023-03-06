@@ -5,6 +5,11 @@ const { Schema, model } = mongoose;
 
 const userSchema = new Schema(
   {
+    avatar: {
+      type: String,
+      default:
+        "https://nvvpfaeffikon.ch/wp-content/uploads/sites/40/2021/04/default-user-icon.jpg",
+    },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true },

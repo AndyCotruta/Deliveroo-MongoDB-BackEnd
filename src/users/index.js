@@ -5,6 +5,18 @@ import { adminOnlyMiddleware } from "../lib/middlewares/adminOnly.js";
 import { createAccessToken } from "../lib/auth/authTools.js";
 import createHttpError from "http-errors";
 import { JWTAuthMiddleware } from "../lib/auth/jwtAuth.js";
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+
+const cloudinaryUser = multer({
+  storage: new CloudinaryStorage({
+    cloudinary, // cloudinary is going to search in .env vars for smt called process.env.CLOUDINARY_URL
+    params: {
+      folder: "bamboobites/users",
+    },
+  }),
+}).single("userImage");
 
 // ..........................................Creating CRUD operations...............................
 const usersRouter = express.Router(); //declaring the Router that connects our operations to the server
@@ -20,21 +32,27 @@ usersRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
   }
 });
 
-usersRouter.put("/me", JWTAuthMiddleware, async (req, res, next) => {
-  try {
-    const updatedUser = await UsersModel.findByIdAndUpdate(
-      req.user._id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-    res.send(updatedUser);
-  } catch (error) {
-    next(error);
+usersRouter.put(
+  "/me",
+  JWTAuthMiddleware,
+  cloudinaryUser,
+  async (req, res, next) => {
+    try {
+      const url = req.file.path;
+      const updatedUser = await UsersModel.findByIdAndUpdate(
+        req.user._id,
+        { ...req.body, avatar: url },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+      res.send(updatedUser);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 usersRouter.delete("/me", JWTAuthMiddleware, async (req, res, next) => {
   try {
@@ -64,11 +82,12 @@ usersRouter.get(
 
 // 1. Create
 
-usersRouter.post("/register", async (req, res, next) => {
+usersRouter.post("/register", cloudinaryUser, async (req, res, next) => {
   try {
+    const url = req.file.path;
     const user = await UsersModel.findOne({ email: req.body.email });
     if (!user) {
-      const newUser = new UsersModel(req.body);
+      const newUser = new UsersModel({ ...req.body, avatar: url });
       const { _id, role } = await newUser.save();
       const payload = { _id, role };
       const accessToken = await createAccessToken(payload);

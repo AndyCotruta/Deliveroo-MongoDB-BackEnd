@@ -12,7 +12,7 @@ const googleStrategy = new GoogleStrategy(
     // This function is executed when Google sends us a successfull response
     // Here we are going to receive some informations about the user from Google (scopes --> profile, email)
     try {
-      const { email, given_name, family_name } = profile._json;
+      const { email, given_name, family_name, picture } = profile._json;
 
       // 1. Check if the user is already in db
       const user = await UsersModel.findOne({ email });
@@ -32,6 +32,7 @@ const googleStrategy = new GoogleStrategy(
           firstName: given_name,
           lastName: family_name,
           email,
+          avatar: picture,
           googleId: profile.id,
         });
         const createdUser = await newUser.save();
