@@ -8,9 +8,6 @@ import { JWTAuthMiddleware } from "../lib/auth/jwtAuth.js";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import pkg from "react-native";
-
-const { Platform } = pkg;
 
 const cloudinaryUser = multer({
   storage: new CloudinaryStorage({
@@ -80,9 +77,9 @@ usersRouter.get(
   async (req, res, next) => {
     console.log(req.user);
 
-    Platform.OS === "android"
-      ? res.redirect("https://expo.auth.io/@coco3071/deliveroo-clone")
-      : res.send(req.user.accessToken);
+    res.redirect(
+      `http://localhost:19006/?acccessToken=${req.user.accessToken}`
+    );
   }
 );
 
