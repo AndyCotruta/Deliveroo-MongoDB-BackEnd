@@ -77,9 +77,10 @@ usersRouter.get(
   async (req, res, next) => {
     console.log(req.user);
 
-    res.redirect(
-      `http://localhost:19006/?acccessToken=${req.user.accessToken}`
-    );
+    // res.redirect(
+    //   `http://localhost:19006/?acccessToken=${req.user.accessToken}`
+    // );
+    res.send({ accessToken });
   }
 );
 
