@@ -8,7 +8,9 @@ import { JWTAuthMiddleware } from "../lib/auth/jwtAuth.js";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import { Platform } from "react-native";
+import pkg from "react-native";
+
+const { Platform } = pkg;
 
 const cloudinaryUser = multer({
   storage: new CloudinaryStorage({
