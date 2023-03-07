@@ -86,6 +86,27 @@ usersRouter.get(
 
 // 1. Create
 
+usersRouter.post("/googleLogin", async (req, res, next) => {
+  try {
+    const user = await UsersModel.findOne({ email: req.body.email });
+    if (!user) {
+      const newUser = new UsersModel(req.body);
+      const { _id, role } = await newUser.save();
+      const payload = { _id, role };
+      const accessToken = await createAccessToken(payload);
+      res.send(accessToken);
+    } else {
+      const payload = { _id: user._id, role: user.role };
+
+      const accessToken = await createAccessToken(payload);
+      res.send({ accessToken });
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
 usersRouter.post("/register", cloudinaryUser, async (req, res, next) => {
   try {
     const url = req.file.path;
