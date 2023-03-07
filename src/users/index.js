@@ -80,7 +80,7 @@ usersRouter.get(
     // res.redirect(
     //   `http://localhost:19006/?acccessToken=${req.user.accessToken}`
     // );
-    res.send({ accessToken });
+    res.send({ accessToken: req.user.accessToken });
   }
 );
 
